@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>琉琉 · 林肯学习工程记录 | FOH 现场调音成长日志</title>
+<style>
+  :root{
+    --bg:#0c0e13;
+    --bg2:#12151d;
+    --card:#171b24;
+    --card2:#1d2230;
+    --line:#2a3040;
+    --text:#e8ecf3;
+    --muted:#9aa3b2;
+    --muted2:#6d7585;
+    --amber:#f5a93b;
+    --amber2:#ffca6b;
+    --blue:#4ea8ff;
+    --green:#4fd1a5;
+    --pink:#f07b9b;
+    --violet:#a78bfa;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:
+      radial-gradient(1200px 600px at 80% -8%, rgba(245,169,59,.10), transparent 60%),
+      radial-gradient(1000px 500px at 0% 0%, rgba(78,168,255,.08), transparent 55%),
+      var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px;}
+
+  /* ===== HERO ===== */
+  header.hero{
+    position:relative;
+    padding:64px 0 44px;
+    border-bottom:1px solid var(--line);
+    overflow:hidden;
+  }
+  header.hero::after{
+    content:"";
+    position:absolute;inset:0;
+    background:linear-gradient(180deg, transparent 0%, var(--bg) 100%);
+    pointer-events:none;
+  }
+  .hero-inner{position:relative;z-index:2;}
+  .kicker{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--amber);font-weight:600;margin-bottom:18px;
+  }
+  .kicker .dot{width:8px;height:8px;border-radius:50%;background:var(--amber);
+    box-shadow:0 0 12px rgba(245,169,59,.8);}
+  h1.title{
+    font-size:clamp(30px,6vw,58px);
+    line-height:1.08;font-weight:800;letter-spacing:.01em;
+  }
+  h1.title .accent{
+    background:linear-gradient(90deg,var(--amber),var(--amber2),var(--blue));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .sub{
+    margin-top:18px;font-size:clamp(16px,2vw,19px);color:var(--muted);max-width:720px;
+  }
+  .meta{
+    margin-top:26px;display:flex;flex-wrap:wrap;gap:12px;
+  }
+  .meta span{
+    font-size:13px;color:var(--muted);
+    background:rgba(255,255,255,.04);
+    border:1px solid var(--line);
+    padding:8px 14px;border-radius:999px;display:inline-flex;align-items:center;gap:7px;
+  }
+  .meta b{color:var(--amber2);font-weight:600;}
+
+  /* ===== STATS ===== */
+  .stats{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+    margin:34px 0 8px;
+  }
+  .stat{
+    background:linear-gradient(180deg,var(--card),var(--bg2));
+    border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px 16px;text-align:center;position:relative;overflow:hidden;
+  }
+  .stat::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+    background:linear-gradient(180deg,var(--amber),transparent);opacity:.8;}
+  .stat .n{font-size:30px;font-weight:800;line-height:1;color:var(--amber2);}
+  .stat .l{font-size:12.5px;color:var(--muted);margin-top:8px;}
+
+  /* ===== SECTION HEADINGS ===== */
+  .section-h{
+    margin:46px 0 22px;display:flex;align-items:center;gap:14px;
+  }
+  .section-h .icon{
+    width:38px;height:38px;border-radius:11px;display:grid;place-items:center;
+    background:linear-gradient(135deg,rgba(245,169,59,.16),rgba(78,168,255,.12));
+    border:1px solid var(--line);font-size:19px;flex-shrink:0;
+  }
+  .section-h h2{font-size:clamp(20px,3vw,26px);font-weight:800;letter-spacing:.01em;}
+  .section-h p{font-size:14px;color:var(--muted);margin-top:2px;}
+
+  /* ===== STICKY NAV ===== */
+  nav.toc{
+    position:sticky;top:0;z-index:50;
+    background:rgba(12,14,19,.86);backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+    margin-top:12px;
+  }
+  .toc-inner{
+    display:flex;gap:8px;overflow-x:auto;padding:12px 20px;max-width:1080px;margin:0 auto;
+    scrollbar-width:thin;
+  }
+  .toc-inner::-webkit-scrollbar{height:6px;}
+  .toc-inner::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px;}
+  .chip{
+    flex-shrink:0;font-size:12.5px;color:var(--muted);cursor:pointer;
+    border:1px solid var(--line);border-radius:999px;padding:7px 13px;white-space:nowrap;
+    transition:.18s;background:var(--card);
+  }
+  .chip:hover{color:var(--amber2);border-color:var(--amber);}
+  .chip.active{background:linear-gradient(90deg,var(--amber),var(--amber2));color:#1a1204;border-color:transparent;font-weight:600;}
+
+  /* ===== ACCORDION SESSIONS ===== */
+  .session{
+    background:linear-gradient(180deg,var(--card),var(--bg2));
+    border:1px solid var(--line);border-radius:var(--radius);
+    margin-bottom:18px;overflow:hidden;transition:border-color .2s;
+  }
+  .session.open{border-color:rgba(245,169,59,.4);}
+  .s-head{
+    display:flex;align-items:center;gap:16px;padding:20px 22px;cursor:pointer;user-select:none;
+  }
+  .s-head:hover{background:rgba(255,255,255,.02);}
+  .date-badge{
+    flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    min-width:76px;padding:10px 12px;border-radius:13px;
+    background:linear-gradient(160deg,rgba(245,169,59,.16),rgba(78,168,255,.08));
+    border:1px solid var(--line);
+  }
+  .date-badge .d{font-size:20px;font-weight:800;color:var(--amber2);line-height:1;}
+  .date-badge .y{font-size:11px;color:var(--muted);margin-top:3px;}
+  .s-title{flex:1;min-width:0;}
+  .s-title .t{font-size:17px;font-weight:700;}
+  .s-title .g{font-size:13px;color:var(--muted);margin-top:3px;display:flex;flex-wrap:wrap;gap:6px;}
+  .tag{
+    font-size:11px;padding:2px 9px;border-radius:999px;background:rgba(78,168,255,.12);
+    color:var(--blue);border:1px solid rgba(78,168,255,.22);
+  }
+  .tag.warn{background:rgba(240,123,155,.12);color:var(--pink);border-color:rgba(240,123,155,.25);}
+  .tag.ok{background:rgba(79,209,165,.12);color:var(--green);border-color:rgba(79,209,165,.25);}
+  .tag.ph{background:rgba(245,169,59,.14);color:var(--amber);border-color:rgba(245,169,59,.3);}
+  .s-arrow{flex-shrink:0;color:var(--muted2);transition:.25s;font-size:18px;}
+  .session.open .s-arrow{transform:rotate(180deg);color:var(--amber);}
+
+  .s-body{display:none;padding:4px 22px 24px;border-top:1px solid var(--line);}
+  .session.open .s-body{display:block;}
+  .s-block{margin-top:22px;}
+  .s-block-label{
+    font-size:13px;font-weight:700;letter-spacing:.03em;color:var(--amber);
+    margin-bottom:10px;display:flex;align-items:center;gap:8px;
+  }
+  .s-block-label::before{content:"";width:16px;height:2px;background:var(--amber);border-radius:2px;flex-shrink:0;}
+  .spec{
+    margin:14px 0;padding:16px 18px;border-radius:12px;
+    background:rgba(78,168,255,.05);border:1px solid rgba(78,168,255,.16);
+  }
+  .spec .spec-h{font-size:13px;color:var(--blue);font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:7px;}
+  ul.notes{list-style:none;}
+  ul.notes li{
+    position:relative;padding:7px 0 7px 26px;color:var(--text);
+  }
+  ul.notes li::before{
+    content:"";position:absolute;left:6px;top:16px;width:6px;height:6px;border-radius:2px;
+    background:var(--amber);transform:rotate(45deg);
+  }
+  ul.notes li ul{list-style:none;margin-top:6px;}
+  ul.notes li ul li{padding:4px 0 4px 20px;color:var(--muted);font-size:14.5px;}
+  ul.notes li ul li::before{left:4px;top:15px;background:var(--muted2);width:4px;height:4px;}
+  ul.notes b{color:var(--amber2);font-weight:600;}
+  kw{color:var(--green);font-weight:600;}
+  .hl{background:linear-gradient(180deg,transparent 62%,rgba(245,169,59,.28) 62%);padding:0 2px;}
+
+  /* gallery */
+  .gallery{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-top:14px;
+  }
+  .g-item{
+    position:relative;border-radius:12px;overflow:hidden;cursor:zoom-in;
+    background:var(--card2);border:1px solid var(--line);aspect-ratio:4/3;
+  }
+  .g-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s;}
+  .g-item:hover img{transform:scale(1.06);}
+  .g-item .cap{
+    position:absolute;left:0;right:0;bottom:0;padding:22px 10px 8px;font-size:12px;
+    color:#eaeef5;background:linear-gradient(transparent,rgba(0,0,0,.78));
+    text-align:left;line-height:1.35;
+  }
+  .count{font-size:12px;color:var(--muted2);margin-top:10px;}
+  .orig{white-space:pre-wrap;word-break:break-word;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Courier New",monospace;font-size:13px;line-height:1.8;color:var(--text);background:rgba(255,255,255,.03);border:1px dashed var(--line);border-radius:12px;padding:16px 18px;margin-top:4px;}
+
+  /* insight callouts */
+  .insight{
+    margin-top:16px;padding:16px 18px;border-radius:12px;position:relative;
+    background:linear-gradient(135deg,rgba(245,169,59,.10),rgba(245,169,59,.03));
+    border:1px solid rgba(245,169,59,.22);
+  }
+  .insight .ic{font-size:12px;font-weight:700;color:var(--amber);letter-spacing:.05em;display:flex;gap:7px;align-items:center;margin-bottom:6px;}
+
+  /* concept cards */
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+  .card{
+    background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);
+    border-radius:var(--radius);padding:18px;
+  }
+  .card .ci{font-size:22px;}
+  .card h3{font-size:15px;margin:10px 0 6px;color:var(--amber2);}
+  .card p{font-size:13.5px;color:var(--muted);}
+
+  /* LIGHTBOX */
+  #lightbox{
+    position:fixed;inset:0;z-index:200;background:rgba(5,6,9,.94);
+    display:none;align-items:center;justify-content:center;padding:30px;
+    backdrop-filter:blur(4px);
+  }
+  #lightbox.show{display:flex;}
+  #lightbox img{max-width:92vw;max-height:88vh;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.6);object-fit:contain;}
+  #lightbox .lb-cap{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);
+    color:#eaeef5;font-size:14px;text-align:center;max-width:80vw;text-shadow:0 2px 8px #000;}
+  .lb-btn{
+    position:absolute;top:50%;transform:translateY(-50%);
+    width:46px;height:46px;border-radius:50%;border:1px solid var(--line);
+    background:rgba(255,255,255,.06);color:#fff;display:grid;place-items:center;
+    cursor:pointer;font-size:20px;user-select:none;transition:.18s;
+  }
+  .lb-btn:hover{background:var(--amber);color:#1a1204;}
+  .lb-prev{left:22px;} .lb-next{right:22px;}
+  .lb-close{position:absolute;top:22px;right:24px;width:44px;height:44px;border-radius:50%;
+    border:1px solid var(--line);background:rgba(255,255,255,.06);color:#fff;
+    display:grid;place-items:center;cursor:pointer;font-size:20px;transition:.18s;}
+  .lb-close:hover{background:var(--pink);color:#1a0208;}
+
+  footer{
+    margin-top:56px;border-top:1px solid var(--line);padding:36px 0 60px;text-align:center;color:var(--muted2);
+    font-size:13px;
+  }
+  footer .fl{color:var(--amber2);font-weight:600;}
+
+  /* progress bar */
+  #bar{position:fixed;top:0;left:0;height:3px;width:0;z-index:100;
+    background:linear-gradient(90deg,var(--amber),var(--blue));}
+
+  @media(max-width:680px){
+    .stats{grid-template-columns:repeat(1,1fr);}
+    .s-head{flex-direction:column;align-items:flex-start;gap:12px;}
+    .s-arrow{position:absolute;right:20px;top:20px;}
+    .session{position:relative;}
+    .gallery{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}
+  }
+  /* ===== 密码锁 ===== */
+  #lock{position:fixed;inset:0;z-index:600;display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(900px 480px at 75% -5%,rgba(245,169,59,.18),transparent 60%),
+      radial-gradient(700px 400px at 0% 110%,rgba(78,168,255,.14),transparent 55%),
+      var(--bg);
+    padding:20px;}
+  .lock-box{width:100%;max-width:380px;text-align:center;padding:38px 30px 30px;
+    background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);
+    border-radius:20px;box-shadow:0 24px 60px rgba(0,0,0,.5);}
+  .lock-ico{font-size:42px;line-height:1;margin-bottom:14px;filter:drop-shadow(0 6px 14px rgba(245,169,59,.4));}
+  .lock-title{font-size:20px;font-weight:800;letter-spacing:.01em;}
+  .lock-sub{font-size:13.5px;color:var(--muted);margin:10px 0 22px;line-height:1.6;}
+  #lock-input{width:100%;padding:14px 16px;font-size:15px;color:var(--text);
+    background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:12px;outline:none;
+    text-align:center;letter-spacing:.1em;}
+  #lock-input:focus{border-color:var(--amber);box-shadow:0 0 0 3px rgba(245,169,59,.15);}
+  #lock-btn{width:100%;margin-top:14px;padding:13px;font-size:15px;font-weight:700;color:#1a1204;cursor:pointer;
+    background:linear-gradient(90deg,var(--amber),var(--amber2));border:none;border-radius:12px;transition:.2s;}
+  #lock-btn:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(245,169,59,.25);}
+  .lock-msg{min-height:20px;margin-top:12px;font-size:13px;color:var(--pink);}
+  body.locked{overflow:hidden;}
+</style>
+</head>
+<body>
+<div id="lock">
+  <div class="lock-box">
+    <div class="lock-ico">🔒</div>
+    <div class="lock-title">琉琉 · 林肯学习记录</div>
+    <p class="lock-sub">此页面受密码保护<br>请输入访问密码继续</p>
+    <input type="password" id="lock-input" placeholder="访问密码" autocomplete="off">
+    <button id="lock-btn">进入页面</button>
+    <p class="lock-msg" id="lock-msg"></p>
+  </div>
+</div>
+<div id="bar"></div>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <div class="wrap hero-inner">
+    <div class="kicker"><span class="dot"></span>FOH 现场调音 · 学习工程记录</div>
+    <h1 class="title">琉琉 · <span class="accent">林肯</span> 学习记录</h1>
+    <p class="sub">一个现场调音师学徒跟着老师「林肯」在真实演出中步步进阶的成长日志：从认识话筒、摆位，到通道参数、信号路由，再到完整的演出工程流程与混音理念。全程实战，跨 <b style="color:var(--amber2)">Allen&amp;Heath · Behringer Wing · Waves LV1</b> 多款调音台学习。</p>
+    <div class="meta">
+      <span>📅 2026.01.23 — 2026.08.07</span>
+      <span>🎙️ 记录图片 <b>90</b> 张</span>
+      <span>🎚️ 主题词 <b>爵士 / 现场 / 混音</b></span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ================= STATS ================= -->
+  <div class="stats">
+    <div class="stat"><div class="n">90</div><div class="l">现场记录 / 截图<br>Images</div></div>
+    <div class="stat"><div class="n">30+</div><div class="l">提到的乐器 & 设备<br>Gear</div></div>
+    <div class="stat"><div class="n">3</div><div class="l">调音台学习<br>Allen&amp;Heath · Wing · LV1</div></div>
+  </div>
+
+  <!-- ================= 学习主线 ================= -->
+  <div class="section-h">
+    <div class="icon">🧭</div>
+    <div>
+      <h2>学习主线 · 成长脉络</h2>
+      <p>从「单点测量」到「系统化混音思维」的进阶路径</p>
+    </div>
+  </div>
+  <div class="cards">
+    <div class="card"><div class="ci">🎤</div><h3>话筒选型 & 摆位</h3><p>Beta52A / Beta57A / Beta181 / KSM141 / sE V7 / sE7 Sidefire / DPA 4018V / SM58 / SM57 / DM6 / Xvive U7…每件乐器的拾音方案。</p></div>
+    <div class="card"><div class="ci">🎚️</div><h3>通道参数</h3><p>Gain、EQ（低切/扫频/高架）、Gate（含 Key Frequency）、Compressor、Send Routing 到 Sub / Group / Parallel。</p></div>
+    <div class="card"><div class="ci">🔌</div><h3>信号链路</h3><p>拾音器 → DI / 音箱 → 卡农 → 调音台；效果器、无线系统、音箱 DI 口直出，注意 6.5 / XLR / DI 数量。</p></div>
+    <div class="card"><div class="ci">🌐</div><h3>网络 & 路由</h3><p>Dante 链接林肯调音台与 WING、Waves SoundGrid、控制网络；OB（Outside Broadcast）直播调音流程。</p></div>
+    <div class="card"><div class="ci">⚖️</div><h3>混音理念</h3><p>有瞬态 / 无瞬态的压缩思路、EQ 低切清理频段、plate / hall 混响、元素拆分、<b>bass 是粘合剂</b>。</p></div>
+    <div class="card"><div class="ci">📐</div><h3>响度标准</h3><p>现场 RMS / LUFS：原声爵士民谣 90 以下，现代电音摇滚 95–105。现场声音要经得起小设备回放。</p></div>
+  </div>
+
+  <!-- ================= NAV ================= -->
+  <nav class="toc">
+    <div class="toc-inner" id="toc"></div>
+  </nav>
+
+  <!-- ================= SESSIONS ================= -->
+  <div class="section-h" id="sessions-lab">
+    <div class="icon">📆</div>
+    <div>
+      <h2>每场学习记录</h2>
+      <p>点击卡片展开细节，点击图片可放大查看</p>
+    </div>
+  </div>
+  <div id="sessions"></div>
+
+  <!-- ================= KEY CONCEPTS ================= -->
+  <div class="section-h" id="concepts">
+    <div class="icon">💡</div>
+    <div>
+      <h2>核心知识点速查</h2>
+      <p>整本记录里最值得反复看的技术要点</p>
+    </div>
+  </div>
+  <div class="insight" style="margin-top:0">
+    <div class="ic">🎯 关键洞察 01</div>
+    <p style="font-size:14.5px"><b>低切的意义</b>：人声切 <kw>80</kw>、Bass 切 <kw>30–100</kw>、Keyboard / 吉他切 <kw>82</kw> —— 这些都不是它们的主要频段，清掉是为了不抢 Bass 和底鼓的清晰度，从而更有律动。</p>
+  </div>
+  <div class="insight">
+    <div class="ic">🎯 关键洞察 02</div>
+    <p style="font-size:14.5px"><b>压缩看瞬态</b>：有瞬态（如 rap、鼓）→ attack <kw>20ms+</kw>、release <kw>60–80ms</kw>，别盖住下一个音头；无瞬态（情歌旋律、铺底）→ attack <kw><10ms</kw>、release <kw>200ms+</kw>，为求平滑。</p>
+  </div>
+  <div class="insight">
+    <div class="ic">🎯 关键洞察 03</div>
+    <p style="font-size:14.5px"><b>元素拆分</b>：打击乐 = drums + drum pad；和声 = vocal + bass + keyboard。混音时先让 <kw>Bass + 打击乐</kw> 组合，再和和声组合 —— <b style="color:var(--amber2)">Bass 是粘合剂</b>。</p>
+  </div>
+  <div class="insight">
+    <div class="ic">🎯 关键洞察 04</div>
+    <p style="font-size:14.5px"><b>Gate 用 Key Frequency</b>：给 Tom 压 Gate 时设置"基础频率"，<kw>只有在这个频率才会打开 Gate</kw> 让声音出去，避免误开。</p>
+  </div>
+  <div class="insight">
+    <div class="ic">🎯 关键洞察 05</div>
+    <p style="font-size:14.5px"><b>混响组合</b>：人声通常 <kw>plate + hall</kw>。plate（板式）pre-dly 0、decay ≈1s、首次反射开中等 → 给宽度；hall（大厅）decay 翻倍 2s+、通常关首次反射 → 给空间延伸。</p>
+  </div>
+  <div class="insight">
+    <div class="ic">🎯 关键洞察 06</div>
+    <p style="font-size:14.5px"><b>弦乐压缩</b>：ratio <kw>&lt;1:2.5</kw>（压得少）、gain reduction <kw>&lt;6dB</kw>、attack 快 <kw>&lt;10ms</kw>、release 慢 <kw>≈200ms</kw>。</p>
+  </div>
+  <div class="insight">
+    <div class="ic">🎯 关键洞察 07</div>
+    <p style="font-size:14.5px"><b>EQ 前置原则</b>："在调 EQ 之前，就把麦克风摆好、或换好。" 很多问题靠 <kw>摆位</kw> 而非 EQ 解决。</p>
+  </div>
+  <div class="insight">
+    <div class="ic">🎯 关键洞察 08</div>
+    <p style="font-size:14.5px"><b>现场响度</b>：原声为主的爵士 / 民谣 <kw>90 LUFS 以下</kw>；现代电音、摇滚、大型演出 <kw>95–105</kw>（正常听感上限）。</p>
+  </div>
+
+  <footer>
+    <p>由《琉琉 · 林肯学习工程记录》整理成网页 —— 现场调音成长日志</p>
+    <p style="margin-top:8px">内容整理自真实课堂记录 · 图片来自学徒现场拍摄与截图</p>
+    <p style="margin-top:16px" class="fl">FOH · 现场调音师学习之路</p>
+  </footer>
+</div>
+
+<!-- ================= LIGHTBOX ================= -->
+<div id="lightbox">
+  <div class="lb-close" id="lb-close">✕</div>
+  <div class="lb-btn lb-prev" id="lb-prev">‹</div>
+  <img id="lb-img" src="" alt="">
+  <div class="lb-btn lb-next" id="lb-next">›</div>
+  <div class="lb-cap" id="lb-cap"></div>
+</div>
+
+<script>
+/* ================= 密码锁（密码：liuliu） ================= */
+document.body.classList.add('locked');
+const LOCK_PASS = 'bGl1bGl1';   // atob('bGl1bGl1') === 'liuliu'
+function tryUnlock(){
+  const v = document.getElementById('lock-input').value;
+  const msg = document.getElementById('lock-msg');
+  if(v.trim().toLowerCase() === window.atob(LOCK_PASS)){
+    document.getElementById('lock').style.display='none';
+    document.body.classList.remove('locked');
+  } else {
+    msg.textContent = '密码错误，请重试';
+    document.getElementById('lock-input').value='';
+    document.getElementById('lock-input').focus();
+  }
+}
+document.getElementById('lock-btn').onclick = tryUnlock;
+document.getElementById('lock-input').addEventListener('keydown', e=>{ if(e.key==='Enter') tryUnlock(); });
+
+/* ================= 原始记录原文（逐字，验证用） ================= */
+const ORIG = {
+s1:`Piano ABass Drum EG Sax
+Drums：KK SN Tom1 Tom2 HH Crash(L) Rider1 Rider 2
+麦克风选择
+KICK:Shure Beta52A
+SN:Shure Beta57A
+TOM1:Shure Beta181AMP
+TOM2: Shure Beta181AMP
+OH-L&R:Shure KSM141
+TwinRev GTA AMP:Shure Beta181C(Cardio心形指向)
+PN-L&H:Shure Beta181C
+Sax:Xvive U7 2.4G频段无线Clip麦克风
+EG-->Pedal Board-->Fender Twin Rev 
+!!!:请把Kick SN Tom1 OH Bass EG Sax TalkMic 轨道参数 按照如下记录下来大概15分钟
+Channels Setup:
+Kick —> Shute Beta52A —XLR—>C. KK
+Preamp: Gain 17dB 48V Delay 3.4ms
+EQ LO.cut 34Hz
+EQ 1
+EQ 2 168Hz / Q 5.0 / -6.5dB
+EQ 3
+EQ 4 4.7kHz / High Shelf / +5.0dB
+Gate: THRS -19.5dB / ATK 0.7ms / Hold 23.2ms / REL 43.1ms / Ring -20.5 dB
+Comp: THRS -10.5dB / ATK 65.2ms / REL 38.9ms / Ratio 3.5 / Gain 5.0dB
+⬆️Dynamics & 质感
+Send Routing: 
+Pre -5.2dB —> Sub
+Post —Group—> Drum —> Master
+Post —Group—> Parallel Drum —> Master
+Not to Master (这个轨道不直接发给master，通过group发）
+^Group pst 0dB
+P.S. (3种总线类型）
+AUX Aux
+GRP Group
+MTX Matrix上次课分割线，琉总什么时候回来填数据？`,
+s2:`2026.1.30 Evolving Jazz
+sE V7 动圈话筒
+Bass 进入效果器，再进入DI (通过卡农线进入调音台)，复制信号进入bass音箱
+Lauten Kick Mic 杨老师貌似很喜欢`,
+s3:`2026.2.6_罗兰年会
+其中罗小黑演出
+歌手+acoustic guitar
+Bass
+Drums
+Electric Guitar 1 / Lead
+Electric Guitar 2
+—vox --> sE v7 --XLR卡农线--> Input no 48V no Pad no inversion 
+给35dB Gain
+—Acoustic Guitar --pickup-6.5Jack Cable-->去到Roland音箱的input（通过音箱的DI卡农口输出（3点））--XLR-->调音台input
+—Bass --pickup-6.5Jack Cable-->去到Bass Amp input（通过音箱的DI卡农口输出（3点））--XLR-->调音台input
+—EG1 -->大综合（代替效果器板，音箱，DI）--> 进调音台输入 --> 不需要供电 --> Gain
+0dB（Line in）信号不损传递-->分叉--第一种情况-->信号的电频不健康，低于-10dB-->询问乐手能否调大输出-->调到80%（如果信号还是弱，那这个人制作能力不行）--第二种情况-->信号太大
+—EG2 -->单块 -->进吉他音箱-->用麦克风sm57动圈话筒对着音箱喇叭中间收音（喇叭中间因为频段均衡，音量均衡-->杨老师生日快乐🎉杨老师早日康复-->进入调音台-->增益不超过30
+—鼓-->Kick SN Tom1 Tom2 +Overheadx2，使用麦克风拾音通过XLR进入调音台INPUT
+小振膜的细节比较多，高频比较清晰
+大振膜的声音比较圆润一点`,
+s4:`2026/3/13
+Vocal Mic：DPA 4018V（超心型电容话筒）
+Sax Mic：Shure SM58 动圈话筒
+Trumpet Mic：Shure SM57 动圈话筒
+Bass Amp Mic：Earthwork DM6（底鼓电容麦）
+麦克风对准大振膜的中心振膜边缘（会清晰一些些）
+没有鼓，bass通过麦克风录，声音更糊，具有温暖的感觉，范围更广
+舞台上的电源在哪里？48V电源`,
+s5:`2026/3/20 
+工作 助理调音师（辅助主 FOH）
+除了调音以外的事情
+很多性感的鼓棒
+A Bass 两个拾音 
+1 个 拾音器信号进入DI 或者进入箱头
+1 个 DPA 麦克风进入右边这块前级（EQ）
+Earthwork DM6 底鼓拾音
+（缺鼓组照片）
+OH 到军鼓 100cm～160cm
+OH到镲片中心＞25cm`,
+s6:`2026.4.3
+完成了第一次调试调音台 设置工程
+路由 Routing
+输入：通过dante连接林肯调音台与wings
+把输入放到通道里面并且进行混音处理输出到main1
+再把main1送到耳机口方便监听
+先设计工程，再做路由，然后再把里面每一条通道设置好，把增益设计好，直到-10dB，不要破就好
+再推起推子，方便混音
+通过DCA同时控制多轨音量
+通过总线（Mix）加混响
+这整个流程就是OB Outside Broadcast的流程，负责给同样戴着耳机的直播观众调音`,
+s7:`2026.4.10 BoggieBoy
+今天概要
+使用gate 压tom，并且用key frequency也就是基础频率只有在这个频率才会打开gate，让声音出去。
+把该做低切的做低切，比如人声切到80，bass切30-100，keyboard和吉他切到82，这些低切为了清理频段，都不是它们的主要频段，会影响bass和底鼓的清晰度，所以会更有律动。
+压缩：
+使用一个铺底的和声乐器，压缩3-4dB。
+比率小于1:3
+软拐角knee
+开自动时间autotime
+目的是为了平滑，因为是铺底的乐器，让动态平滑。`,
+s8:`2026.4.24
+plate reverb
+是没有边界的，高频好听，需要高频
+hall reverb
+有一个声音的空间感
+混音的思考角度
+元素的拆分：
+打击乐 percussion： drums + drum pad
+和声 harmonic chords：vocal + bass + keyboard...
+要把bass和percussion组合在一起，然后再和和声组合
+bass是粘合剂 
+人声想要听起来好听：
+第一个频段是高频，这个频段大概是5k以上，是声音的细节
+第二个频段是2k左右，影响声音的硬度
+第三个频段是胸腔的声音，大概在100-300，听起来很温暖`,
+s9:`2025.5.8
+爵士五重奏
+钢琴 木贝斯 鼓 
+人声 森海塞尔 动圈话筒 E835
+萨克斯 sE7 Sidefire侧向 驻极体电容麦（耐压，灵敏度低一些）
+高级
+上方是交换机，左边是Waves SoundGrid网络，右边是Dante和控制网络。
+路由器连Dante和control这个组。
+以后如果你想深研究，dante和别的网络共存，
+但waves sound grid不行
+yasuo
+Bass的压缩：
+怎么判断压缩效果好还是不好：那就是不断开关压缩，声音大小始终不变，然后需要对比音头。
+Sax 压缩：
+可以和旋律性的声部乐器比较像。平稳线条，还有清晰度，适当的音头（这个自己调），和中等的release，大概在100-200ms
+EQ:这样的EQ就很好⬇️，在调eq之前就把麦克风摆好，或者换好，这样就最好了。
+A Bass EQ：中高频段有打品的声音，木bass现实中没有超低的，所以需要我们给它去掉，还原音色。比如不应该有的低频
+混响有两个组合给人声用：
+一个是plate，板式混响
+板式在这里的特点是：pre dly为0，decay大概1秒，首次反射（attack）开到中等，为声音提供了宽度
+一个是hall，大厅混响
+大厅在这里的特点是：pre dly看情况有，decay大概翻倍，2秒多。这个混响需要空间的延伸，一般关掉首次反射。`,
+s10:`2026.5.15 长江组曲
+乐器：
+Piano 
+String Quartet：
+v1, va, ce都是拾音器+6.5吉他线，进入DI，已经好了，但是通过卡农线进调音台
+v2是背极式电容麦克风（驻极体麦克风），用的是v7，特性是不那么敏感，穿音会少一点，但是细节会少一点。
+clarinet
+A Bass
+E Bass
+Drums
+通过compressor塑造模糊的效果，听起来在远一点的地方
+拾音器会有太多的细节，听起来粗糙，为了让它更顺滑一点，需要用eq减少2k以上的声音，1.5k-3k 硬的声音，8k是那种玻璃的声音
+还有加reverb填补声音`,
+s11:`2026.5.22
+关于压缩compressor
+现场声音分为：
+有瞬态的
+无瞬态的
+人声，被分为有瞬态（rap）和没瞬态（情歌旋律）
+有瞬态的应该是慢一点的attack 20ms以上 release 60-80ms，为了不要盖住下一个音头
+无瞬态的应该是个位数的attack 7ms以下 release200ms+
+现场响度标准rms：
+90lfus 以下以原声为主的音乐风格，爵士民谣
+95以上，105以下，现代电音和摇滚音量，主要为现代大型演出音量🔊`,
+s12:`2026.06.19琵琶 钢琴+电贝司木贝司+鼓组+爵士空心电吉他
+琵琶声音不好拾,指向手指弹奏区域，琴桥上方。声音偏硬。`,
+s13:`2026.6.26 
+voc male
+voc female
+piano
+sax
+bass
+drum`,
+s14:`2026.7.3
+Lady and Horn
+Voc
+Trumpet
+Piano
+Bass
+Drums
+Bass需要饱和失真，才能在比较小的设备上播放出来，比如手机，maxx bass可以做到
+人声去齿音需要insert DeEsser，频段大概在2k-3k，或者5k以上
+通过唱一段solo给一个比较稳定的尾音，这个音一般都是主和弦的1 3 5`,
+s15:`2026.7.10 Charlie Wand with Senza New Strings
+EQ低切可以在乐器最低音的地方
+如果用多个不一样的小振膜识同一种乐器，不同mic里面的eq也不一样。如果高频太多需要高架
+弦乐的compressor需要同一个ratio小一些的，小于1:2.5，压的稍微少一点，小于6dB，然后attack很快<10ms, release慢一些大概200ms`,
+s16:`2026.8.7 大世界盒子剧场
+完整的演出工程：
+确定stage上的乐器，每个乐器所使用的线，需要用到多少6.5乐器线，多少卡农线，多少DI盒。画出图片并且记得额外携带备用的线。
+不仅如此，还需确认现场的音响以及使用地反还是耳反。这些的线也需要考虑。`
+};
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+/* ================= DATA ================= */
+const sessions = [
+{
+  date:"01.23", year:"2026", title:"EVGENY POBOZHIY Quintet", group:"爵士五重奏 · 迪厅/俱乐部",
+  tags:["Jazz 五重奏","话筒选型","通道参数","Send Routing"],
+  qid:"s1",
+  blocks:[
+    {label:"编制 & 鼓组", html:`
+      <ul class="notes">
+        <li>编制：<b>Piano · A Bass · Drum · EG · Sax</b></li>
+        <li>鼓组：<kw>KK · SN · Tom1 · Tom2 · HH · Crash(L) · Rider1 · Rider2</kw></li>
+      </ul>`},
+    {label:"麦克风选型方案", html:`
+      <ul class="notes">
+        <li>Kick：<kw>Shure Beta52A</kw></li>
+        <li>Snare：<kw>Shure Beta57A</kw></li>
+        <li>Tom1 / Tom2：<kw>Shure Beta181AMP</kw></li>
+        <li>Overhead L&R：<kw>Shure KSM141</kw></li>
+        <li>TwinRev GTA Amp：<kw>Shure Beta181C</kw>（Cardio 心形指向）</li>
+        <li>Piano L&H：<kw>Shure Beta181C</kw></li>
+        <li>Sax：<kw>Xvive U7</kw> —— 2.4G 频段 <kw>无线 Clip 麦克风</kw></li>
+        <li>信号链：<kw>EG → Pedal Board → Fender Twin Rev</kw></li>
+      </ul>`},
+    {label:"Kick 通道参数（15 分钟记录）", html:`
+      <div class="spec">
+        <div class="spec-h">🎛️ Kick → Shure Beta52A —XLR→ C.KK</div>
+        <ul class="notes">
+          <li><b>Preamp</b>：Gain <kw>17dB</kw> · 48V · Delay <kw>3.4ms</kw></li>
+          <li><b>EQ</b>：LO-cut <kw>34Hz</kw>；EQ2 <kw>168Hz / Q5.0 / -6.5dB</kw>；EQ4 <kw>4.7kHz / High Shelf / +5.0dB</kw></li>
+          <li><b>Gate</b>：THRS <kw>-19.5dB</kw> · ATK <kw>0.7ms</kw> · Hold <kw>23.2ms</kw> · REL <kw>43.1ms</kw> · Ring <kw>-20.5dB</kw></li>
+          <li><b>Comp</b>：THRS <kw>-10.5dB</kw> · ATK <kw>65.2ms</kw> · REL <kw>38.9ms</kw> · Ratio <kw>3.5</kw> · Gain <kw>5.0dB</kw> <span style="color:var(--pink)">—— ⬆️ Dynamics &amp; 质感</span></li>
+        </ul>
+      </div>`},
+    {label:"Send Routing（发送路由）", html:`
+      <ul class="notes">
+        <li><span class="hl">Pre -5.2dB → Sub</span></li>
+        <li><span class="hl">Post —Group→ Drum → Master</span></li>
+        <li><span class="hl">Post —Group→ Parallel Drum → Master</span></li>
+        <li>说明：<b>这个轨道不直接发给 Master</b>，通过 Group 发；Group 电平 <kw>pst 0dB</kw></li>
+        <li>三种总线类型：<kw>AUX</kw> / <kw>GRP(Group)</kw> / <kw>MTX(Matrix)</kw></li>
+      </ul>`},
+  ],
+  images:[
+    {s:"img/image1.jpg", c:"演出介绍：吉他手 Evgeny Pobozhiy（叶夫根尼·波博日）"},
+    {s:"img/image2.jpg", c:"介绍：五重奏背景"},
+    {s:"img/image3.jpg", c:"乐队 / 演出介绍截图"},
+    {s:"img/image4.jpg", c:"现场记录"},
+    {s:"img/image5.jpg", c:"现场记录"},
+    {s:"img/image6.jpg", c:"现场记录"},
+    {s:"img/image7.jpg", c:"底鼓 Canopus + Shure Beta52A"},
+    {s:"img/image8.jpg", c:"军鼓 + Beta57A"},
+    {s:"img/image9.jpg", c:"嗵鼓 + Beta181AMP"},
+    {s:"img/image10.jpg", c:"嗵鼓拾音"},
+    {s:"img/image11.jpg", c:"Overhead 架设 · KSM141"},
+    {s:"img/image12.jpg", c:"Overhead 拾音"},
+    {s:"img/image13.jpg", c:"Fender Twin Reverb-Amp + Beta181C"},
+    {s:"img/image14.jpg", c:"钢琴 L&H · Beta181C"},
+    {s:"img/image15.jpg", c:"现场 / 设备"},
+    {s:"img/image16.jpg", c:"现场 / 设备"},
+    {s:"img/image17.jpg", c:"现场 / 设备"},
+    {s:"img/image18.jpg", c:"Sax 无线 Clip 麦克风 Xvive U7"},
+    {s:"img/image19.jpg", c:"萨克斯拾音"},
+    {s:"img/image20.jpg", c:"萨克斯拾音"},
+  ]
+},
+{
+  date:"01.30", year:"2026", title:"Evolving Jazz", group:"爵士专场",
+  tags:["人声话筒","Bass 信号链"],
+  qid:"s2",
+  blocks:[
+    {label:"本场要点", html:`
+      <ul class="notes">
+        <li>人声：<kw>sE V7</kw> 动圈话筒</li>
+        <li><b>Bass 信号链</b>：进入效果器 → 再进入 DI（通过卡农线进调音台），<kw>复制信号进 bass 音箱</kw></li>
+        <li>老师貌似很喜欢 <kw>Lauten Kick Mic</kw>（底鼓话筒）</li>
+      </ul>`},
+  ],
+  images:[
+    {s:"img/image21.jpg", c:"sE V7 动圈话筒"},
+    {s:"img/image22.jpg", c:"sE V7 细节"},
+    {s:"img/image23.jpg", c:"现场 / 乐队"},
+    {s:"img/image24.jpg", c:"现场 / 乐队"},
+    {s:"img/image25.jpg", c:"现场 / 乐队"},
+    {s:"img/image26.jpg", c:"现场 / 乐队"},
+    {s:"img/image27.jpg", c:"现场 / 乐队"},
+    {s:"img/image28.jpg", c:"现场 / 乐队"},
+    {s:"img/image29.jpg", c:"现场 / 乐队"},
+    {s:"img/image30.jpg", c:"现场 / 设备"},
+    {s:"img/image31.jpg", c:"现场 / 设备"},
+    {s:"img/image32.jpg", c:"现场 / 设备"},
+    {s:"img/image33.jpg", c:"现场 / 设备"},
+    {s:"img/image34.jpg", c:"现场 / 设备"},
+    {s:"img/image35.jpg", c:"现场 / 设备"},
+    {s:"img/image36.jpg", c:"现场 / 设备"},
+  ]
+},
+{
+  date:"02.06", year:"2026", title:"罗兰年会 · 罗小黑演出", group:"年会 / 多编制",
+  tags:["多信号链","DI 盒","电平判断"],
+  qid:"s3",
+  blocks:[
+    {label:"编制", html:`
+      <ul class="notes">
+        <li><kw>人声 + Acoustic Guitar</kw> · <kw>Bass</kw> · <kw>Drums</kw> · <kw>EG1 / Lead</kw> · <kw>EG2</kw></li>
+      </ul>`},
+    {label:"各声部信号链", html:`
+      <ul class="notes">
+        <li>人声 → <kw>sE v7</kw> → XLR 卡农 → Input（<b>无 48V · 无 Pad · 无反相</b>）→ 给 <kw>35dB Gain</kw></li>
+        <li><b>Acoustic Guitar</b> → 拾音器 → 6.5 Jack → 去 Roland 音箱 input（经音箱 DI 卡农口输出，3 点）→ XLR → 调音台 input</li>
+        <li><b>Bass</b> → 拾音器 → 6.5 Jack → 去 Bass Amp input（经音箱 DI 卡农口输出）→ XLR → 调音台 input</li>
+        <li><b>EG1</b> → <kw>大综合</kw>（代替效果器板 / 音箱 / DI）→ 进调音台输入 → <b>无需供电</b> → Gain <kw>0dB</kw>（Line in，信号无损传递）→ 分叉：
+          <ul>
+            <li>第一种：信号电平不健康，低于 <kw>-10dB</kw> → 询问乐手能否调大输出 → 调到 <kw>80%</kw>（若仍弱，说明其制作能力不行）</li>
+            <li>第二种：信号太大</li>
+          </ul>
+        </li>
+        <li><b>EG2</b> → 单块 → 进吉他音箱 → 用 <kw>SM57 动圈</kw> 对着喇叭中间收音（喇叭中间因为频段均衡、音量均衡）→ 进调音台 → 增益不超过 <kw>30</kw></li>
+        <li><b>鼓</b> → Kick / SN / Tom1 / Tom2 + Overhead×2，麦克风拾音 → XLR 进调音台 INPUT</li>
+      </ul>`},
+    {label:"振膜心得", html:`
+      <ul class="notes">
+        <li><b>小振膜</b>：细节比较多，高频比较清晰</li>
+        <li><b>大振膜</b>：声音比较圆润一点</li>
+      </ul>`},
+  ],
+  images:[
+    {s:"img/image37.jpg", c:"Acoustic Guitar 信号链（Roland DI 口直出）"},
+    {s:"img/image38.jpg", c:"Bass 信号链（Bass Amp DI 口直出）"},
+    {s:"img/image39.jpg", c:"Bass 信号链"},
+    {s:"img/image40.jpg", c:"鼓组拾音"},
+    {s:"img/image41.jpg", c:"鼓组拾音"},
+    {s:"img/image42.jpg", c:"鼓组拾音"},
+    {s:"img/image43.jpg", c:"鼓组拾音"},
+    {s:"img/image44.jpg", c:"鼓组拾音"},
+    {s:"img/image45.jpg", c:"鼓组拾音"},
+  ]
+},
+{
+  date:"03.13", year:"2026", title:"爵士现场 · 人声为主", group:"爵士四重奏",
+  tags:["人声/管乐话筒","容麦指向","48V"],
+  qid:"s4",
+  blocks:[
+    {label:"麦克风方案", html:`
+      <ul class="notes">
+        <li><b>Vocal Mic</b>：<kw>DPA 4018V</kw>（超心形电容话筒）</li>
+        <li><b>Sax Mic</b>：<kw>Shure SM58</kw> 动圈话筒</li>
+        <li><b>Trumpet Mic</b>：<kw>Shure SM57</kw> 动圈话筒</li>
+        <li><b>Bass Amp Mic</b>：<kw>Earthwork DM6</kw>（底鼓电容麦）</li>
+      </ul>`},
+    {label:"摆位与心得", html:`
+      <ul class="notes">
+        <li>麦克风对准 <kw>大振膜 / 中心振膜边缘</kw>，会清晰一些些</li>
+        <li><b>没有鼓</b>时，Bass 通过 <kw>麦克风</kw>录 —— 声音更糊、更温暖，范围更广</li>
+        <li>舞台上的电源在哪？<kw>48V 电源</kw>（电容麦供电）</li>
+      </ul>`},
+  ],
+  images:[
+    {s:"img/image46.jpg", c:"人声 DPA 4018V 超心形电容麦"},
+    {s:"img/image47.jpg", c:"人声话筒摆位"},
+    {s:"img/image48.jpg", c:"人声 / 现场"},
+    {s:"img/image49.jpg", c:"现场"},
+    {s:"img/image50.jpg", c:"Sax · SM58 动圈"},
+    {s:"img/image51.jpg", c:"Trumpet · SM57 动圈"},
+    {s:"img/image52.jpg", c:"Bass Amp · Earthwork DM6"},
+    {s:"img/image53.jpg", c:"麦克风摆位"},
+    {s:"img/image54.jpg", c:"麦克风摆位"},
+  ]
+},
+{
+  date:"03.20", year:"2026", title:"助理调音师 · 辅助主 FOH", group:"除调音以外的事",
+  tags:["助理工作","双拾音","Overhead 距离"],
+  qid:"s5",
+  blocks:[
+    {label:"本场要点", html:`
+      <ul class="notes">
+        <li>工作内容：<kw>助理调音师</kw>（辅助主 FOH）—— <b>除了调音以外的事情</b></li>
+        <li>很多「性感」的鼓棒</li>
+        <li><b>A Bass 两个拾音</b>：
+          <ul>
+            <li>1 个拾音器信号 → 进入 DI 或者进入箱头</li>
+            <li>1 个 <kw>DPA 麦克风</kw> → 进入右边这块前级（EQ）</li>
+          </ul>
+        </li>
+        <li><b>Earthwork DM6</b> 底鼓拾音（缺鼓组照片）</li>
+        <li><b>Overhead 到军鼓</b>：<kw>100cm～160cm</kw></li>
+        <li><b>Overhead 到镲片中心</b>：<kw>＞25cm</kw></li>
+      </ul>`},
+  ],
+  images:[
+    {s:"img/image55.jpg", c:"现场 / 工作照"},
+    {s:"img/image56.jpg", c:"鼓棒"},
+    {s:"img/image57.jpg", c:"鼓棒"},
+    {s:"img/image58.jpg", c:"鼓棒"},
+    {s:"img/image59.jpg", c:"鼓棒"},
+    {s:"img/image60.jpg", c:"现场 / 设备"},
+    {s:"img/image61.jpg", c:"现场 / 设备"},
+    {s:"img/image62.jpg", c:"Earthwork DM6 / 前级"},
+  ]
+},
+{
+  date:"04.03", year:"2026", title:"完成第一次调试调音台 · 设置工程", group:"首次完整路由",
+  tags:["Dante","路由","OB 流程","WING"],
+  qid:"s6",
+  blocks:[
+    {label:"路由 Routing", html:`
+      <ul class="notes">
+        <li>输入：通过 <kw>Dante</kw> 连接 <b>林肯调音台</b> 与 <kw>WING</kw></li>
+        <li>把输入放到通道里面，并进行混音处理，输出到 <kw>main1</kw></li>
+        <li>再把 main1 送到耳机口，方便监听</li>
+      </ul>`},
+    {label:"完整工作流程", html:`
+      <ul class="notes">
+        <li><b>先设计工程</b> → 再做路由 → 然后把里面每一条通道设置好</li>
+        <li>把 <b>增益</b>设计好，直到 <kw>-10dB</kw>，<b>不要爆（破）</b>就好</li>
+        <li>再推起推子，方便混音</li>
+        <li>通过 <kw>DCA</kw> 同时控制多轨音量</li>
+        <li>通过 <kw>总线（Mix）</kw>加混响</li>
+      </ul>`},
+    {label:"这是什么流程？", html:`
+      <div class="insight">
+        <div class="ic">📡 知识点</div>
+        <p style="font-size:14.5px">这整个流程就是 <b>OB（Outside Broadcast，外场转播 / 直播）</b> 的流程 —— 负责给同样戴着耳机的直播观众调音。</p>
+      </div>`},
+  ],
+  images:[
+    {s:"img/image63.jpg", c:"歌手介绍 · Hetty Kate"},
+    {s:"img/image64.jpg", c:"乐队 / 歌手介绍"},
+    {s:"img/image65.jpg", c:"乐队 / 歌手介绍"},
+    {s:"img/image66.jpg", c:"乐队 / 歌手介绍"},
+  ]
+},
+{
+  date:"04.10", year:"2026", title:"BoggieBoy", group:"乐队现场",
+  tags:["Gate 键控","低切","压缩"],
+  qid:"s7",
+  blocks:[
+    {label:"本场要点", html:`
+      <ul class="notes">
+        <li><b>用 Gate 压 Tom</b>：并用 <kw>Key Frequency</kw>（基础频率）—— <span class="hl">只有在这个频率才会打开 Gate 让声音出去</span></li>
+        <li><b>低切（清理频段）</b>：把该做低切的做低切 —— 人声切 <kw>80</kw>、Bass 切 <kw>30–100</kw>、Keyboard 和吉他切 <kw>82</kw>。这些都不是它们的主要频段，清掉会影响 Bass 和底鼓的清晰度，所以会更有律动。</li>
+        <li><b>压缩</b>：使用一个 <kw>铺底的和声乐器</kw>，压缩 <kw>3–4dB</kw>；比率小于 <kw>1:3</kw>；软拐角 <kw>Knee</kw>；开自动时间 <kw>Auto Time</kw> —— 目的是平滑，因为是铺底的乐器，让动态平滑。</li>
+      </ul>`},
+  ],
+  images:[
+    {s:"img/image67.jpg", c:"现场 / 乐手"},
+    {s:"img/image68.jpg", c:"现场 / 乐手"},
+    {s:"img/image69.jpg", c:"现场 / 乐手"},
+    {s:"img/image70.jpg", c:"现场 / 乐手"},
+    {s:"img/image71.jpg", c:"现场 / 乐手"},
+    {s:"img/image72.jpg", c:"设备 / 调音"},
+  ]
+},
+{
+  date:"04.24", year:"2026", title:"混响与混音思考角度", group:"混音理念",
+  tags:["混响","元素拆分","人声频段"],
+  qid:"s8",
+  blocks:[
+    {label:"混响类型", html:`
+      <ul class="notes">
+        <li><b>plate（板式）reverb</b>：<kw>没有边界</kw>，高频好听，<b>需要高频</b></li>
+        <li><b>hall（大厅）reverb</b>：有<span class="hl">空间感</span>（回响了）</li>
+      </ul>`},
+    {label:"混音思考角度 · 元素拆分", html:`
+      <ul class="notes">
+        <li><b>打击乐 percussion</b>：drums + drum pad</li>
+        <li><b>和声 harmonic chords</b>：vocal + bass + keyboard…</li>
+        <li>要把 <kw>Bass 和 percussion（打击乐）</kw>组合在一起，然后再和和声组合</li>
+        <li><b style="color:var(--amber2)">Bass 是粘合剂</b> —— 把律动和和弦粘在一起</li>
+      </ul>`},
+    {label:"人声频段（怎样变好听）", html:`
+      <ul class="notes">
+        <li><b>第一频段 · 高频</b>：大约 <kw>5k 以上</kw> —— 是声音的<b>细节</b></li>
+        <li><b>第二频段</b>：<kw>2k 左右</kw> —— 影响声音的<b>硬度</b></li>
+        <li><b>第三频段 · 胸腔的声音</b>：<kw>100–300</kw> —— 听起来很<b>温暖</b></li>
+      </ul>`},
+  ],
+  images:[],  /* 本场无单独图片 */
+},
+{
+  date:"05.08", year:"2026", title:"爵士五重奏", group:"钢琴 / 木贝斯 / 鼓 / 人声 / 萨克斯",
+  tags:["网络拓扑","压缩对比法","EQ 前置","混响组合"],
+  qid:"s9",
+  blocks:[
+    {label:"编制 & 麦克风", html:`
+      <ul class="notes">
+        <li>编制：<b>钢琴 · 木贝斯 · 鼓</b> · 人声 · 萨克斯</li>
+        <li>人声：<kw>森海塞尔（Sennheiser）E835</kw> 动圈话筒</li>
+        <li>萨克斯：<kw>sE7 Sidefire 侧向</kw> 驻极体电容麦（耐压，灵敏度低一些）—— 高级</li>
+      </ul>`},
+    {label:"网络拓扑", html:`
+      <ul class="notes">
+        <li>上方是交换机；<b>左边</b>是 <kw>Waves SoundGrid</kw> 网络；<b>右边</b>是 <kw>Dante</kw> 和 <kw>控制网络</kw></li>
+        <li>路由器连 Dante 和 control 这个组</li>
+        <li>以后想深研究：<kw>Dante 和别的网络可以共存</kw>，但 <b style="color:var(--pink)">Waves SoundGrid 不行</b></li>
+      </ul>`},
+    {label:"压缩 & EQ", html:`
+      <ul class="notes">
+        <li><b>Bass 压缩</b>：怎么判断效果好还是不好 —— 不断开关压缩，<span class="hl">声音大小始终不变</span>，然后需要 <kw>对比音头</kw></li>
+        <li><b>Sax 压缩</b>：可以和旋律性的声部乐器比较像 —— 平稳线条、清晰度、适当的音头（自己调）、中等 release 大概 <kw>100–200ms</kw></li>
+        <li><b>EQ 前置原则</b>：“在调 EQ 之前就把麦克风摆好，或者换好，这样就最好了。”</li>
+        <li><b>A Bass EQ</b>：中高频段有 <kw>打品的声音</kw>；木贝斯现实中没有超低，所以需要去掉、还原音色（比如<b>不应该有的低频</b>）—— 去掉</li>
+      </ul>`},
+    {label:"人声混响组合", html:`
+      <ul class="notes">
+        <li><b>plate（板式）</b>：<kw>pre-dly 为 0</kw>，decay 大概 <kw>1 秒</kw>，首次反射（attack）开到<b>中等</b>，为声音提供了<b>宽度</b></li>
+        <li><b>hall（大厅）</b>：pre-dly <kw>看情况有</kw>，decay 大概<b>翻倍</b>（2 秒+）；需要<b>空间的延伸</b>，一般<b>关掉首次反射</b></li>
+      </ul>`},
+  ],
+  images:[
+    {s:"img/image73.jpg", c:"sE7 SideFire 侧向驻极体电容麦"},
+    {s:"img/image74.jpg", c:"网络 / 交换机（SoundGrid / Dante / Control）"},
+    {s:"img/image75.jpg", c:"现场 / 设备"},
+    {s:"img/image76.jpg", c:"Bass 压缩（开关对比法）"},
+    {s:"img/image77.jpg", c:"Sax 压缩参数"},
+    {s:"img/image78.jpg", c:"萨克斯 EQ —— Behringer WING 调音台"},
+    {s:"img/image79.jpg", c:"A Bass EQ（去超低 / 打品）"},
+    {s:"img/image80.jpg", c:"混响参数（plate / hall）"},
+  ]
+},
+{
+  date:"05.15", year:"2026", title:"《长江组曲》", group:"弦乐四重奏 + 编配",
+  tags:["弦乐拾音","拾音器处理","压缩/混响塑形"],
+  qid:"s10",
+  blocks:[
+    {label:"乐队编制", html:`
+      <ul class="notes">
+        <li><b>Piano</b> · <b>String Quartet（弦乐四重奏）</b> · <b>clarinet</b> · <b>A Bass</b> · <b>E Bass</b> · <b>Drums</b></li>
+        <li>弦乐 <kw>v1 / va / ce</kw>：拾音器 + <kw>6.5 吉他线</kw>，进入 DI，已经好了，但是通过 <kw>卡农线</kw>进调音台</li>
+        <li>弦乐 <kw>v2</kw>：<kw>背极式电容麦克风（驻极体话筒）</kw>，用的是 v7 —— 特性是<b>不那么敏感</b>，穿音会少一点，但<b>细节会少一点</b></li>
+      </ul>`},
+    {label:"处理手法", html:`
+      <ul class="notes">
+        <li>通过 <kw>compressor</kw> 塑造<b>模糊</b>的效果，听起来在<b>远一点的地方</b></li>
+        <li>拾音器会有太多细节，听起来<b>粗糙</b>；为了让它更顺滑一点，需要用 EQ 减少 <kw>2k 以上</kw>的声音：<kw>1.5k–3k</kw> 硬的声音，<kw>8k</kw> 是那种<b>玻璃的声音</b></li>
+        <li>还有 <kw>加 reverb 填补声音</kw></li>
+      </ul>`},
+  ],
+  images:[],  /* 本场无单独图片 */
+},
+{
+  date:"05.22", year:"2026", title:"压缩 Compressor & 响度标准", group:"理论课",
+  tags:["瞬态压缩","响度 RMS/LUFS"],
+  qid:"s11",
+  blocks:[
+    {label:"现场声音分类", html:`
+      <ul class="notes">
+        <li>现场声音分为：<kw>有瞬态</kw> / <kw>无瞬态</kw></li>
+        <li>人声也被分为有瞬态（rap）和没瞬态（情歌旋律）</li>
+      </ul>`},
+    {label:"对应的压缩设置", html:`
+      <ul class="notes">
+        <li><b>有瞬态</b>：应该用<b>慢一点</b>的 attack <kw>20ms 以上</kw>，release <kw>60–80ms</kw> —— 为了<b>不要盖住下一个音头</b></li>
+        <li><b>无瞬态</b>：应该用<b>个位数</b>的 attack <kw>7ms 以下</kw>，release <kw>200ms+</kw></li>
+      </ul>`},
+    {label:"现场响度标准 RMS", html:`
+      <div class="spec">
+        <div class="spec-h">📊 音量 / 风格对照</div>
+        <ul class="notes">
+          <li><kw>90 LUFS 以下</kw>：以<b>原声为主</b>的音乐风格 —— 爵士、民谣</li>
+          <li><kw>95 以上，105 以下</kw>：<b>现代电音和摇滚</b>音量 —— 主要为现代大型演出音量 🔊</li>
+        </ul>
+      </div>`},
+  ],
+  images:[],  /* 本场无单独图片 */
+},
+{
+  date:"06.19", year:"2026", title:"琵琶 · 钢琴 + 贝斯 + 鼓组 + 爵士空心电吉他", group:"民乐 + 爵士",
+  tags:["民乐拾音"],
+  qid:"s12",
+  blocks:[
+    {label:"编制", html:`
+      <ul class="notes">
+        <li><b>琵琶</b> · <b>钢琴</b> · <b>电贝司</b> · <b>木贝司</b> · <b>鼓组</b> · <b>爵士空心电吉他</b></li>
+      </ul>`},
+    {label:"琵琶拾音心得", html:`
+      <ul class="notes">
+        <li><b>琵琶声音不好拾</b>：指向<b>手指弹奏区域</b>，<span class="hl">琴桥上方</span>。声音偏硬。</li>
+      </ul>`},
+  ],
+  images:[
+    {s:"img/image81.jpg", c:"琵琶 / 现场乐队"},
+    {s:"img/image82.jpg", c:"现场记录"},
+  ]
+},
+{
+  date:"06.26", year:"2026", title:"乐队现场", group:"六件套",
+  tags:["六件套"],
+  qid:"s13",
+  blocks:[
+    {label:"编制", html:`
+      <ul class="notes">
+        <li><kw>Voc male</kw> · <kw>Voc female</kw> · <kw>Piano</kw> · <kw>Sax</kw> · <kw>Bass</kw> · <kw>Drum</kw></li>
+      </ul>`},
+  ],
+  images:[
+    {s:"img/image83.jpg", c:"现场 / 乐队"},
+  ]
+},
+{
+  date:"07.03", year:"2026", title:"Lady and Horn", group:"主唱 + 小号",
+  tags:["Bass 饱和","去齿音","和弦尾音"],
+  qid:"s14",
+  blocks:[
+    {label:"编制", html:`
+      <ul class="notes">
+        <li><kw>Voc</kw> · <kw>Trumpet</kw> · <kw>Piano</kw> · <kw>Bass</kw> · <kw>Drums</kw></li>
+      </ul>`},
+    {label:"处理要点", html:`
+      <ul class="notes">
+        <li><b>Bass 需要饱和失真</b>，才能在比较小的设备（比如手机）上播放出来 —— <kw>maxx bass</kw> 可以做到</li>
+        <li><b>人声去齿音</b>：需要 <kw>insert DeEsser</kw>，频段大概在 <kw>2k–3k</kw>，或者 <kw>5k 以上</kw></li>
+        <li>通过唱一段 solo，给一个比较<b>稳定的尾音</b>，这个音一般都是 <kw>主和弦的 1 / 3 / 5</kw></li>
+      </ul>`},
+  ],
+  images:[
+    {s:"img/image84.jpg", c:"现场 / 乐队"},
+    {s:"img/image85.jpg", c:"现场 / 乐队"},
+    {s:"img/image86.jpg", c:"现场 / 乐队"},
+    {s:"img/image87.jpg", c:"现场 / 乐队"},
+    {s:"img/image88.jpg", c:"人声去齿音 · Insert DeEsser"},
+  ]
+},
+{
+  date:"07.10", year:"2026", title:"Charlie Wand with Senza New Strings", group:"弦乐 + 爵士",
+  tags:["EQ 低切","弦乐压缩","小振膜"],
+  qid:"s15",
+  blocks:[
+    {label:"本场要点", html:`
+      <ul class="notes">
+        <li><b>EQ 低切</b>：可以在<b>乐器最低音</b>的地方</li>
+        <li><b>多个不一样的小振膜</b>录同一种乐器：不同 mic 里面的 EQ 也不一样；如果高频太多需要 <kw>高架</kw></li>
+        <li><b>弦乐的 compressor</b>：需要同一 <kw>ratio 小一些</kw>的，小于 <kw>1:2.5</kw>，压的稍微少一点，小于 <kw>6dB</kw>；然后 attack 很快 <kw>&lt;10ms</kw>，release 慢一些，大概 <kw>200ms</kw></li>
+      </ul>`},
+  ],
+  images:[
+    {s:"img/image89.jpg", c:"现场 / 弦乐 + 乐队"},
+  ]
+},
+{
+  date:"08.07", year:"2026", title:"大世界盒子剧场 · 完整演出工程", group:"剧场 / 完整工程",
+  tags:["线材规划","舞台画图","监听方案"],
+  qid:"s16",
+  blocks:[
+    {label:"完整演出工程要点", html:`
+      <ul class="notes">
+        <li>确定 <kw>stage 上的乐器</kw>，每个乐器所用的是<b>哪种线</b>，需要用到多少 <kw>6.5 乐器线</kw>、多少 <kw>卡农线</kw>、多少 <kw>DI 盒</kw></li>
+        <li><b>画出图片</b>（stage plot），并且记得<b>额外携带备用的线</b></li>
+        <li>不仅如此，还需确认<b>现场的音响</b>，以及使用 <kw>音箱（地返）</kw>还是 <kw>耳返</kw>。这些的线也需要考虑。</li>
+      </ul>`},
+    {label:"手绘舞台布置图", html:`
+      <ul class="notes">
+        <li>标注：XLR / 6.5×2 / DI×2 / XLR×2；A:6.5×2 · DI×2 · XLR×2；<kw>Main L / Main R</kw>、<kw>Sub</kw>、<kw>Front Fill</kw></li>
+        <li>含 SM58（人声）、BV1/2/3、AC（Acoustic Guitar）、Perc+D Pad、KB（Keyboard）、LeadV、Pickup+DI、48V（电容麦供电）</li>
+      </ul>`},
+  ],
+  images:[
+    {s:"img/image90.jpg", c:"手绘 Stage Plot（舞台布置图）"},
+  ]
+},
+];
+
+/* ================= RENDER ================= */
+const sessionsEl = document.getElementById('sessions');
+const tocEl = document.getElementById('toc');
+
+function render(){
+  let html = '';
+  sessions.forEach((s, idx) => {
+    // tags
+    const tagsHtml = s.tags.map((t,i)=>{
+      const cls = i===0?'tag ok':(i===1?'tag warn':'tag');
+      return `<span class="${cls}">${t}</span>`;
+    }).join('');
+
+    // blocks
+    let blocksHtml = '';
+    s.blocks.forEach(b=>{
+      blocksHtml += `<div class="s-block"><div class="s-block-label">${b.label}</div>${b.html}</div>`;
+    });
+
+    // images
+    let imgHtml = '';
+    if(s.images.length){
+      imgHtml += `<div class="s-block"><div class="s-block-label">📷 记录图片（${s.images.length}）</div><div class="gallery">`;
+      s.images.forEach((im,ii)=>{
+        imgHtml += `<div class="g-item" data-idx="${idx}" data-img="${ii}" title="${im.c}">
+            <img loading="lazy" src="${im.s}" alt="${im.c}">
+            <div class="cap">${im.c}</div>
+          </div>`;
+      });
+      imgHtml += `</div></div>`;
+    }
+
+    html += `
+    <div class="session" id="${s.qid}" data-idx="${idx}">
+      <div class="s-head" onclick="toggle(${idx})">
+        <div class="date-badge"><div class="d">${s.date}</div><div class="y">${s.year}</div></div>
+        <div class="s-title">
+          <div class="t">${s.title}</div>
+          <div class="g">${s.group} ${s.images.length?`<span class="tag ph">📷 ${s.images.length} 图</span>`:''} ${tagsHtml}</div>
+        </div>
+        <div class="s-arrow">▾</div>
+      </div>
+      <div class="s-body">
+        <div class="s-block"><div class="s-block-label">🧾 记录内容</div>${blocksHtml}</div>
+        ${imgHtml}
+        <div class="s-block"><div class="s-block-label">📄 原始记录原文（逐字，验证用）</div><pre class="orig">${esc(ORIG[s.qid]||'')}</pre></div>
+      </div>
+    </div>`;
+  });
+  sessionsEl.innerHTML = html;
+
+  // toc chips
+  let tocHtml = '<div class="chip" data-target="sessions-lab" onclick="goTop()">📋 全部</div>';
+  sessions.forEach(s=>{
+    tocHtml += `<div class="chip" data-target="${s.qid}" onclick="openSession(${sessions.indexOf(s)})">${s.date} ${s.title.split('·')[0].trim()}</div>`;
+  });
+  tocEl.innerHTML = tocHtml;
+}
+
+function toggle(idx){
+  const el = sessionsEl.querySelectorAll('.session')[idx];
+  el.classList.toggle('open');
+  // update toc active
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  const s = sessions[idx];
+  const chip = [...document.querySelectorAll('.chip')].find(c=>c.dataset.target===s.qid);
+  if(chip) chip.classList.add('active');
+}
+function openSession(idx){
+  const el = sessionsEl.querySelectorAll('.session')[idx];
+  const isOpen = el.classList.contains('open');
+  // close others, open this
+  sessionsEl.querySelectorAll('.session').forEach(x=>x.classList.remove('open'));
+  el.classList.add('open');
+  el.scrollIntoView({behavior:'smooth', block:'start'});
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  const s = sessions[idx];
+  const chip = [...document.querySelectorAll('.chip')].find(c=>c.dataset.target===s.qid);
+  if(chip) chip.classList.add('active');
+  const _ = isOpen;
+}
+function goTop(){
+  document.querySelectorAll('.session').forEach(x=>x.classList.remove('open'));
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  document.getElementById('sessions-lab').scrollIntoView({behavior:'smooth'});
+}
+
+/* ================= LIGHTBOX ================= */
+const lb = document.getElementById('lightbox');
+const lbImg = document.getElementById('lb-img');
+const lbCap = document.getElementById('lb-cap');
+let curSession=0, curImg=0;
+
+function showLightbox(sessionIdx, imgIdx){
+  curSession=sessionIdx; curImg=imgIdx;
+  updateLb();
+  lb.classList.add('show');
+}
+function updateLb(){
+  const s = sessions[curSession];
+  const im = s.images[curImg];
+  if(!im) return;
+  lbImg.src = im.s;
+  lbCap.textContent = `${im.c}　(${curImg+1}/${s.images.length})`;
+}
+function lbNav(dir){
+  const s = sessions[curSession];
+  curImg = (curImg + dir + s.images.length) % s.images.length;
+  updateLb();
+}
+document.getElementById('lb-close').onclick = ()=> lb.classList.remove('show');
+document.getElementById('lb-prev').onclick = ()=> lbNav(-1);
+document.getElementById('lb-next').onclick = ()=> lbNav(1);
+lb.onclick = (e)=>{ if(e.target===lb) lb.classList.remove('show'); };
+document.addEventListener('keydown', e=>{
+  if(!lb.classList.contains('show')) return;
+  if(e.key==='Escape') lb.classList.remove('show');
+  if(e.key==='ArrowLeft') lbNav(-1);
+  if(e.key==='ArrowRight') lbNav(1);
+});
+
+// delegate gallery clicks
+sessionsEl.addEventListener('click', e=>{
+  const item = e.target.closest('.g-item');
+  if(item){
+    showLightbox(parseInt(item.dataset.idx), parseInt(item.dataset.img));
+  }
+});
+
+/* ================= SCROLL PROGRESS ================= */
+window.addEventListener('scroll', ()=>{
+  const h = document.documentElement;
+  const sc = h.scrollTop || document.body.scrollTop;
+  const max = h.scrollHeight - h.clientHeight;
+  document.getElementById('bar').style.width = (max>0 ? (sc/max*100) : 0) + '%';
+});
+
+render();
+/* open first session by default */
+document.querySelectorAll('.session')[0].classList.add('open');
+</script>
+</body>
+</html>
